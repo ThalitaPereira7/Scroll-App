@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:video_player/video_player.dart';
 
 class Home extends StatefulWidget {
@@ -7,7 +6,7 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() => _HomeState();
-}
+} 
 
 class _HomeState extends State<Home> {
   final List<String> videoPaths = [
@@ -17,13 +16,26 @@ class _HomeState extends State<Home> {
   ];
 
   late List<VideoPlayerController> controllers;
+  int currentIndex = 0;
+  final PageController pageController = PageController();
 
   @override
   void initState() {
     super.initState();
     controllers = videoPaths
-        .map((path) => VideoPlayerController.asset(path)..initialize())
+        .map((path) => VideoPlayerController.asset(path))
         .toList();
+
+    // Inicializa os vídeos
+    for (var controller in controllers) {
+      controller.initialize().then((_) {
+        setState(() {});
+      });
+    }
+
+    // Começa o primeiro vídeo automaticamente
+    controllers[0].setLooping(true);
+    controllers[0].play();
   }
 
   @override
@@ -31,57 +43,105 @@ class _HomeState extends State<Home> {
     for (var controller in controllers) {
       controller.dispose();
     }
+    pageController.dispose();
     super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      // Pausa o vídeo anterior
+      controllers[currentIndex].pause();
+      // Atualiza o índice atual
+      currentIndex = index;
+      // Inicia o novo vídeo
+      controllers[currentIndex].setLooping(true);
+      controllers[currentIndex].play();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset("assets/images/logo.png", width: 400,),
-            SizedBox(height: 24),
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 300,
-                enlargeCenterPage: true,
-                autoPlay: false,
-              ),
-              items: controllers.map((controller) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return controller.value.isInitialized
-                        ? AspectRatio(
-                            aspectRatio: controller.value.aspectRatio,
-                            child: VideoPlayer(controller),
+      body: PageView.builder(
+        scrollDirection: Axis.vertical,
+        controller: pageController,
+        itemCount: controllers.length,
+        onPageChanged: _onPageChanged,
+        itemBuilder: (context, index) {
+          final controller = controllers[index];
+          return controller.value.isInitialized
+              ? Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: controller.value.size.width,
+                        height: controller.value.size.height,
+                        child: VideoPlayer(controller),
+                      ),
+                    ),
+                    Positioned(
+                      top: 50,
+                      left: 20,
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                        width: 120,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 40,
+                      right: 20,
+                      child: IconButton(
+                        iconSize: 40,
+                        color: Colors.white,
+                        icon: Icon(
+                          controller.value.isPlaying
+                              ? Icons.pause_circle
+                              : Icons.play_circle,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            controller.value.isPlaying
+                                ? controller.pause()
+                                : controller.play();
+                          });
+                        },
+                      ),
+                    ),
+
+                     Positioned(
+                      bottom: 40,
+                      left: 20,
+                      child: Column(
+                        children: [
+                          Row(
+
+                            children: [
+                              Image.asset("assets/images/user.png",width: 50,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                Text("Thalita", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
+                                Text("Desenvolvedora Flutter"),
+
+                              ],)
+                            ],
                           )
-                        : Container(
-                            color: Colors.black,
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                  },
+                        ],
+                      )
+                    ),
+
+                    
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
                 );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Play/Pause o vídeo atual do carrossel
-          final current = controllers.firstWhere(
-            (c) => c.value.isInitialized && c.value.isPlaying,
-            orElse: () => controllers[0],
-          );
-          setState(() {
-            current.value.isPlaying ? current.pause() : current.play();
-          });
         },
-        child: Icon(Icons.play_arrow),
       ),
+      
     );
   }
 }

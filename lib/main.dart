@@ -1,3 +1,4 @@
+import 'package:appscroll/page_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
@@ -44,7 +45,7 @@ class TelaInicial extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home()),
+                    MaterialPageRoute(builder: (context) => const PageNavigator()),
                   );
                   // Ação do botão
                 },
