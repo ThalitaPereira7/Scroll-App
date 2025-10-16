@@ -1,7 +1,6 @@
 import 'package:appscroll/page_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home.dart';
 void main() {
   runApp(MyApp());
 }

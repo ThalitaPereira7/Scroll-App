@@ -120,11 +120,12 @@ class _HomeState extends State<Home> {
 
                             children: [
                               Image.asset("assets/images/user.png",width: 50,),
+                              SizedBox.fromSize(size: Size(10, 0)),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                Text("Thalita", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
-                                Text("Desenvolvedora Flutter"),
+                                Text("Thalita", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+                                Text("olha esse videooo", style: TextStyle(color: Colors.white),)
 
                               ],)
                             ],
