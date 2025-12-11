@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "845171915982",
+    "project_id": "scroll-e09f3",
+    "storage_bucket": "scroll-e09f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845171915982:android:6ac5e28a37f811ba39649f",
+        "android_client_info": {
+          "package_name": "appscroll.appscroll"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPixDwKH8Lijc9H_q3BIuZlLCok_-VVaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845171915982:android:c94fd088b289a7d239649f",
+        "android_client_info": {
+          "package_name": "com.scrollapp7.scroll"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPixDwKH8Lijc9H_q3BIuZlLCok_-VVaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
